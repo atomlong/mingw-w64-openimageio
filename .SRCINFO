@@ -1,6 +1,6 @@
 pkgbase = mingw-w64-openimageio
 	pkgdesc = A library for reading and writing images, including classes, utilities, and applications (mingw-w64)
-	pkgver = 2.5.9.0
+	pkgver = 2.5.11.0
 	pkgrel = 1
 	url = http://www.openimageio.org/
 	arch = any
@@ -9,6 +9,7 @@ pkgbase = mingw-w64-openimageio
 	makedepends = mingw-w64-robin-map
 	makedepends = mingw-w64-wine
 	makedepends = mingw-w64-boost
+	makedepends = ninja
 	depends = mingw-w64-openexr
 	depends = mingw-w64-libtiff
 	depends = mingw-w64-libpng
@@ -29,7 +30,7 @@ pkgbase = mingw-w64-openimageio
 	options = !strip
 	options = !buildflags
 	options = staticlibs
-	source = openimageio-2.5.9.0.tar.gz::https://github.com/OpenImageIO/oiio/archive/v2.5.9.0.tar.gz
-	sha256sums = b6a68e369bc475525eb843bdc0cb8adc910cc71000825f8db9b5e136166cdc78
+	source = openimageio-2.5.11.0.tar.gz::https://github.com/OpenImageIO/oiio/archive/v2.5.11.0.tar.gz
+	sha256sums = ebf1945e36679be55519d9f42a8f029c4a53d4efb4aaee3b10af6cdc93fb614b
 
 pkgname = mingw-w64-openimageio

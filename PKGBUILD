@@ -2,7 +2,7 @@
 
 _pkgname=openimageio
 pkgname=mingw-w64-${_pkgname}
-pkgver=2.5.9.0
+pkgver=2.5.11.0
 pkgrel=1
 pkgdesc='A library for reading and writing images, including classes, utilities, and applications (mingw-w64)'
 url='http://www.openimageio.org/'
@@ -26,13 +26,13 @@ depends=(
 	'mingw-w64-libheif'
 	'mingw-w64-ptex'
 )
-makedepends=('mingw-w64-cmake' 'mingw-w64-robin-map' 'mingw-w64-wine' 'mingw-w64-boost')
+makedepends=('mingw-w64-cmake' 'mingw-w64-robin-map' 'mingw-w64-wine' 'mingw-w64-boost' 'ninja')
 #checkdepends=('python')
 arch=('any')
 options=(!strip !buildflags staticlibs)
 optdepends=()
 source=("$_pkgname-$pkgver.tar.gz::https://github.com/OpenImageIO/oiio/archive/v${pkgver}.tar.gz")
-sha256sums=('b6a68e369bc475525eb843bdc0cb8adc910cc71000825f8db9b5e136166cdc78')
+sha256sums=('ebf1945e36679be55519d9f42a8f029c4a53d4efb4aaee3b10af6cdc93fb614b')
 
 _srcdir="OpenImageIO-${pkgver}"
 _architectures='i686-w64-mingw32 x86_64-w64-mingw32'
@@ -65,7 +65,7 @@ prepare() {
 
 build() {
 	for _arch in ${_architectures}; do
-		${_arch}-cmake -S "${_srcdir}" -B "build-${_arch}-static" "${_flags[@]}" \
+		${_arch}-cmake -G Ninja -S "${_srcdir}" -B "build-${_arch}-static" "${_flags[@]}" \
 			-DBUILD_SHARED_LIBS=OFF \
 			-DBUILD_TESTING=OFF -DOIIO_BUILD_TESTS=OFF \
 			-DOIIO_DOWNLOAD_MISSING_TESTDATA=OFF \
@@ -74,7 +74,7 @@ build() {
 			-DCMAKE_FIND_NO_INSTALL_PREFIX=ON
 		cmake --build "build-${_arch}-static"
 		
-		${_arch}-cmake -S "${_srcdir}" -B "build-${_arch}" "${_flags[@]}" \
+		${_arch}-cmake -G Ninja -S "${_srcdir}" -B "build-${_arch}" "${_flags[@]}" \
 			-DBUILD_TESTING=OFF -DOIIO_BUILD_TESTS=OFF \
 			-DOIIO_DOWNLOAD_MISSING_TESTDATA=OFF \
 			-DOIIO_BUILD_TOOLS=ON
