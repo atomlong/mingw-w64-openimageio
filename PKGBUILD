@@ -2,7 +2,7 @@
 
 _pkgname=openimageio
 pkgname=mingw-w64-${_pkgname}
-pkgver=2.5.11.0
+pkgver=2.5.12.0
 pkgrel=1
 pkgdesc='A library for reading and writing images, including classes, utilities, and applications (mingw-w64)'
 url='http://www.openimageio.org/'
@@ -32,7 +32,7 @@ arch=('any')
 options=(!strip !buildflags staticlibs)
 optdepends=()
 source=("$_pkgname-$pkgver.tar.gz::https://github.com/OpenImageIO/oiio/archive/v${pkgver}.tar.gz")
-sha256sums=('ebf1945e36679be55519d9f42a8f029c4a53d4efb4aaee3b10af6cdc93fb614b')
+sha256sums=('51ea3c309bad7381fd0d7ef793e93a72d8e0edaeff4ff329f4f21fb5de3d90bd')
 
 _srcdir="OpenImageIO-${pkgver}"
 _architectures='i686-w64-mingw32 x86_64-w64-mingw32'
@@ -43,10 +43,10 @@ _flags=(
 	-DBUILD_MISSING_ROBINMAP=OFF
 	-DUSE_EXTERNAL_PUGIXML=ON
 	-DCMAKE_CXX_STANDARD=20
-	-DINSTALL_DOCS=OFF 
+	-DINSTALL_DOCS=OFF
 	-DUSE_PYTHON=OFF
 	-DUSE_QT=OFF
-	-DUSE_CCACHE=OFF 
+	-DUSE_CCACHE=OFF
 	-DUSE_SIMD='sse4.2'
 	-DEMBEDPLUGINS=ON
 	-DSTOP_ON_WARNING=OFF
@@ -55,11 +55,11 @@ _flags=(
 
 prepare() {
 	cd "${_srcdir}"
-	
+
 	sed -i 's/ + sizeof(m_padding)//' 'src/libtexture/imagecache_pvt.h'
 	sed -i 's/sizeof(\*this) == member_size,/sizeof(*this) == sizeof(*this),/' 'src/libtexture/imagecache_pvt.h'
 	sed -i 's/int m_padding = 0;/#if UINTPTR_MAX > 4294967295\nint m_padding = 0;\n#endif/' 'src/libtexture/imagecache_pvt.h'
-	
+
 	#sed -i 's/os.path.join(OIIO_BUILD_ROOT, "bin", app)/os.path.join(OIIO_BUILD_ROOT, "bin", app, ".exe")/' 'testsuite/runtest.py'
 }
 
@@ -73,7 +73,7 @@ build() {
 			-DCMAKE_INSTALL_PREFIX="/usr/${_arch}/static" \
 			-DCMAKE_FIND_NO_INSTALL_PREFIX=ON
 		cmake --build "build-${_arch}-static"
-		
+
 		${_arch}-cmake -G Ninja -S "${_srcdir}" -B "build-${_arch}" "${_flags[@]}" \
 			-DBUILD_TESTING=OFF -DOIIO_BUILD_TESTS=OFF \
 			-DOIIO_DOWNLOAD_MISSING_TESTDATA=OFF \
@@ -96,7 +96,7 @@ package() {
 		DESTDIR="${pkgdir}" cmake --install "build-${_arch}-static"
 		rm -rf "$pkgdir"/usr/${_arch}/static/share
 		${_arch}-strip -g "$pkgdir"/usr/${_arch}/static/lib/*.a
-		
+
 		DESTDIR="${pkgdir}" cmake --install "build-${_arch}"
 		${_arch}-strip "$pkgdir"/usr/${_arch}/bin/*.exe
 		${_arch}-strip --strip-unneeded "$pkgdir"/usr/${_arch}/bin/*.dll
